@@ -6,6 +6,7 @@
 /storage/*.key
 /vendor/*
 !/vendor/filament/
+!/vendor/livewire/
 .env
 .env.backup
 .env.production
