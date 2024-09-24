@@ -112,9 +112,9 @@
                     </div>
                     <p class="mb-2 text-gray-500 dark:text-gray-400">{{ Str::limit($comment->content, 150) }}</p>
                     <footer class="mb-5 text-sm text-gray-500 dark:text-gray-400">
-                        <p>Reviewed on <time
-                                datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F j, Y') }}</time>
-                        </p>
+                        {{-- <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F j, Y')</time> --}}
+                        <datetime="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}
+                        </datetime=>
                     </footer>
                 </article>
             @endforeach

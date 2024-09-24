@@ -319,7 +319,7 @@
 
     <footer style="background-color: #3D3B8E;">
         <div class="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-            x<span class="text-sm text-white">© 2024 <a href="{{ route('home') }}" class="hover:underline">TEFA
+            <span class="text-sm text-white">© 2024 <a href="{{ route('home') }}" class="hover:underline">TEFA
                     RPL</a>. All Rights Reserved.
             </span>
             <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-white sm:mt-0">
