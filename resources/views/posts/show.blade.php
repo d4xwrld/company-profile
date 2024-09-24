@@ -1,6 +1,3 @@
-<div>
-    <!-- Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less. - Marie Curie -->
-</div>
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="bumblebee">
 
@@ -105,22 +102,79 @@
                 <article
                     class="bg-white rounded-lg shadow-md p-6 mb-6 border border-gray-300 w-full max-w-2xl sm:w-full md:w-full lg:w-full xl:w-full"
                     data-aos="zoom-out-up" data-aos-duration="1000">
-                    <div class="flex mb-4">
+                    <div class="flex justify-between mb-4">
                         <div class="font-medium dark:text-white">
                             <p>{{ $comment->user ? $comment->user->name : 'Deleted User' }}</p>
                         </div>
+                        @if ($comment->user_id === Auth::id())
+                            <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots"
+                                class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                                type="button">
+                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 4 15">
+                                    <path
+                                        d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+                                </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div id="dropdownDots"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropdownMenuIconButton">
+                                    <li>
+                                        <a href="{{ route('comments.edit', $comment) }}"
+                                            class="block px-4 py-2 hover:bg-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST"
+                                            onsubmit="return confirmDeletion(event);">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="#"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><button
+                                                    type="submit">Delete</button></a>
+                                        </form>
+                                        <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
+                                        <script>
+                                            function confirmDeletion(event) {
+                                                event.preventDefault();
+                                                Swal.fire({
+                                                    title: 'Yakin nih?',
+                                                    text: "Gabakal bisa bikin dia balik lagi loh!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Ya, hapus ajalah',
+                                                    cancelButtonText: 'Jangan Deh :('
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        event.target.submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    </li>
+                            </div>
+                        @endif
                     </div>
                     <p class="mb-2 text-gray-500 dark:text-gray-400">{{ Str::limit($comment->content, 150) }}</p>
                     <footer class="mb-5 text-sm text-gray-500 dark:text-gray-400">
                         {{-- <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F j, Y')</time> --}}
-                        <datetime="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}
-                        </datetime=>
+                        <datetime="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}</datetime>
+                        @if ($comment->created_at != $comment->updated_at)
+                            <span class="text-gray-500">(diedit pada
+                                {{ $comment->updated_at->diffForHumans() }})</span>
+                        @endif
                     </footer>
                 </article>
             @endforeach
         </div>
 
-        <!-- Comment Form -->
+        {{-- <!-- Comment Form -->
         @auth
             <form action="{{ route('comments.store') }}" method="POST">
                 @csrf
@@ -141,6 +195,42 @@
                     </div>
                 </div>
             </form>
+        @endauth --}}
+
+        <!-- Comment Form -->
+        @auth
+            @php
+                $userHasCommented = $post->comments->where('user_id', Auth::id())->isNotEmpty();
+            @endphp
+
+            @if (!$userHasCommented)
+                <form action="{{ route('comments.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                    <div
+                        class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 shadow-lg">
+                        <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                            <label for="comment" class="sr-only">Your comment</label>
+                            <textarea id="comment" name="content" rows="4"
+                                class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                                placeholder="Write a comment..." required></textarea>
+                        </div>
+                        <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                            <button type="submit"
+                                class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                                Post comment
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            @else
+                <div
+                    class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 shadow-lg">
+                    <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800 text-red-900">
+                        <p class="text-red-500">Kamu sudah memberikan Testimonial!</p>
+                    </div>
+                </div>
+            @endif
         @endauth
     </div>
 </body>
