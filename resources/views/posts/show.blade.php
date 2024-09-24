@@ -17,6 +17,7 @@
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ asset('css/flowbite.min.css') }}">
     <script src="{{ asset('js/flowbite.min.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
     @include ('layouts.navbar')
 </head>
 
@@ -137,7 +138,6 @@
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><button
                                                     type="submit">Delete</button></a>
                                         </form>
-                                        <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
                                         <script>
                                             function confirmDeletion(event) {
                                                 event.preventDefault();
@@ -201,35 +201,45 @@
         @auth
             @php
                 $userHasCommented = $post->comments->where('user_id', Auth::id())->isNotEmpty();
+                $userHasAccess = Auth::user()->posts->contains($post);
             @endphp
 
-            @if (!$userHasCommented)
-                <form action="{{ route('comments.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+            @if ($userHasAccess)
+                @if (!$userHasCommented)
+                    <form action="{{ route('comments.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="post_id" value="{{ $post->id }}">
+                        <div
+                            class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 shadow-lg">
+                            <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                                <label for="comment" class="sr-only">Testimonial Anda</label>
+                                <textarea id="comment" name="content" rows="4"
+                                    class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                                    placeholder="Tuliskan Pengalman Anda!" required></textarea>
+                            </div>
+                            <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                                <button type="submit"
+                                    class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                                    Terbitkan!
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                @else
                     <div
                         class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 shadow-lg">
-                        <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                            <label for="comment" class="sr-only">Your comment</label>
-                            <textarea id="comment" name="content" rows="4"
-                                class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                placeholder="Write a comment..." required></textarea>
-                        </div>
-                        <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                            <button type="submit"
-                                class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                                Post comment
-                            </button>
+                        <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800 text-red-900">
+                            <p class="text-red-500">Kamu sudah memberikan Testimonial!</p>
                         </div>
                     </div>
-                </form>
-            @else
+                @endif
+                {{-- @else
                 <div
                     class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 shadow-lg">
                     <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800 text-red-900">
-                        <p class="text-red-500">Kamu sudah memberikan Testimonial!</p>
+                        <p class="text-red-500">Hubungi admin</p>
                     </div>
-                </div>
+                </div> --}}
             @endif
         @endauth
     </div>

@@ -28,6 +28,14 @@ class PostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
+    public static function canAccess(): bool
+    {
+        if (Auth::user()->usertype == 'admin') {
+            return static::canViewAny();
+        }
+
+        return false;
+    }
     public static function form(Form $form): Form
     {
         return $form

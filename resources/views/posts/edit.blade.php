@@ -21,7 +21,7 @@
 
 <body>
     <div class="container mx-auto mt-10">
-        <h1 class="text-2xl text-center font-bold mb-6">Edit testimonial</h1>
+        <h1 class="text-2xl text-center font-bold mb-6">Perbarui Testimonial!</h1>
 
         <form action="{{ route('comments.update', $comment) }}" method="POST"
             class="bg-white p-6 rounded-lg shadow-md">
@@ -29,7 +29,7 @@
             @method('PUT')
 
             <div class="mb-4">
-                <label for="content" class="block text-sm font-medium text-gray-700">Your testimonial</label>
+                <label for="content" class="block text-sm font-medium text-gray-700">Testimonial Anda!</label>
                 <textarea id="content" name="content" rows="4"
                     class="mt-1 block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
                     placeholder="Write a testimonial..." required>{{ old('content', $comment->content) }}</textarea>
@@ -38,11 +38,11 @@
             <div class="flex items-center gap-4">
                 <button type="submit"
                     class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                    Update
+                    Perbarui
                 </button>
                 <a href="{{ route('posts.show', ['slug' => $comment->post->slug]) }}"
                     class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-gray-700 bg-gray-200 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-300">
-                    Cancel
+                    Kembal
                 </a>
             </div>
         </form>

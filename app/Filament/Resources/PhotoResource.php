@@ -19,12 +19,22 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PhotoResource extends Resource
 {
     protected static ?string $model = Photo::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
+
+    public static function canAccess(): bool
+    {
+        if (Auth::user()->usertype == 'admin') {
+            return static::canViewAny();
+        }
+
+        return false;
+    }
 
     public static function form(Form $form): Form
     {

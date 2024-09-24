@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Auth\LogoutController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -18,3 +19,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
+Route::post('/logout', [LogoutController::class, '__invoke'])->name('logout');

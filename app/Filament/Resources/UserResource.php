@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserResource extends Resource
@@ -22,6 +24,15 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function canAccess(): bool
+    {
+        if (Auth::user()->usertype == 'admin') {
+            return static::canViewAny();
+        }
+
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
@@ -46,6 +57,12 @@ class UserResource extends Resource
                     ->placeholder('Masukkan Password')
                     ->password()
                     ->autocomplete('new-password'),
+                CheckboxList::make('posts')
+                    ->label('Posts')
+                    ->relationship('posts', 'title')
+                    ->columns(2)
+                    ->helperText('Select the posts the user can give testimonials for.'),
+                // TO-DO: Nambahin akses user buat bisa kasih testimonial di post sesuai yang dia pesan jadi gabisa kasih testimonial di post yang dia belom pesan
             ]);
     }
 
@@ -63,6 +80,12 @@ class UserResource extends Resource
                     ->label('Role')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('posts.title')
+                    ->label('Akses Testimonial')
+                    ->sortable()
+                    ->searchable()
+                    ->default('kosong')
+                    ->formatStateUsing(fn($state) => $state ?? 'Kosong'),
             ])
             ->filters([
                 //
