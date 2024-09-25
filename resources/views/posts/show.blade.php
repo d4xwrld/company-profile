@@ -215,7 +215,7 @@
                                 <label for="comment" class="sr-only">Testimonial Anda</label>
                                 <textarea id="comment" name="content" rows="4"
                                     class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                    placeholder="Tuliskan Pengalman Anda!" required></textarea>
+                                    placeholder="Tuliskan Pengalaman Anda!" required></textarea>
                             </div>
                             <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
                                 <button type="submit"

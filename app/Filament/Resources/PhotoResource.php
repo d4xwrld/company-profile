@@ -62,7 +62,7 @@ class PhotoResource extends Resource
             ->columns([
                 TextColumn::make('post.title')
                     ->label('Post')
-                    ->searchable()
+
                     ->sortable(),
                 ImageColumn::make('image_path')
                     ->label('Gambar'),

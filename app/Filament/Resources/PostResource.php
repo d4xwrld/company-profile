@@ -74,23 +74,23 @@ class PostResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')
-                    ->searchable()
+
                     ->sortable(),
                 TextColumn::make('description')
-                    ->searchable()
+
                     ->sortable(),
                 ImageColumn::make('image_url')
-                    ->searchable()
+
                     ->disk('public')
                     // ->directory('images')
                     ->sortable(),
                 TextColumn::make('slug'),
                 TextColumn::make('category.name')
-                    ->searchable()
+
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Uploaded By')
-                    ->searchable()
+
                     ->sortable(),
             ])
             ->filters([

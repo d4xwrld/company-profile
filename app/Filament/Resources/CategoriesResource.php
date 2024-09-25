@@ -48,7 +48,7 @@ class CategoriesResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label('Nama Kategori')
-                    ->searchable()
+
                     ->sortable(),
             ])
             ->filters([

@@ -58,11 +58,10 @@ class UserResource extends Resource
                     ->password()
                     ->autocomplete('new-password'),
                 CheckboxList::make('posts')
-                    ->label('Posts')
+                    ->label('Akses Post')
                     ->relationship('posts', 'title')
                     ->columns(2)
-                    ->helperText('Select the posts the user can give testimonials for.'),
-                // TO-DO: Nambahin akses user buat bisa kasih testimonial di post sesuai yang dia pesan jadi gabisa kasih testimonial di post yang dia belom pesan
+                    ->helperText('Pilih post yang dapat diberi testimonial'),
             ]);
     }
 
@@ -71,19 +70,19 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable()
+
                     ->sortable(),
                 TextColumn::make('email')
-                    ->searchable()
+
                     ->sortable(),
                 TextColumn::make('usertype')
                     ->label('Role')
-                    ->searchable()
+
                     ->sortable(),
                 TextColumn::make('posts.title')
                     ->label('Akses Testimonial')
                     ->sortable()
-                    ->searchable()
+
                     ->default('kosong')
                     ->formatStateUsing(fn($state) => $state ?? 'Kosong'),
             ])
